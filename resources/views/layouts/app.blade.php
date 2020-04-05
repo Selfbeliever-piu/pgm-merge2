@@ -53,6 +53,8 @@
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 								<a class="dropdown-item" href="{{ route('loginwith') }}">{{__('loginwith') }}</a>
 								<a class="dropdown-item" href="{{ route('register') }}">{{__('Register') }}</a>
+								<a class="dropdown-item" href="{{ route('manageroles') }}">{{__('Manage Roles') }}</a>
+								<a class="dropdown-item" href="/manageusers">{{__('Manage Users') }}</a>
                                   
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
@@ -78,5 +80,5 @@
         </main>
     </div>
 </body>
-@yield('js-script')
+@yield('script')
 </html>

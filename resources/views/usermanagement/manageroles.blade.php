@@ -61,12 +61,10 @@
 @endsection
 
 
-@section('js-script')
-<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
-      </script>
+@section('script')
+<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
 <script type="text/javascript" >
-
-
 
 function addRow(){
 	var rows= $('#tblPosts tbody .created_roles').length;
@@ -169,7 +167,7 @@ function save(edit){
 	
 
 	}
-	console.log("newdata "+ newUsersData);
+
 	
 
 	$.ajaxSetup({
@@ -193,8 +191,6 @@ function save(edit){
 		
 
 }
-
-
 
 
 
