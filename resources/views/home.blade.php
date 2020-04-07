@@ -8,6 +8,7 @@
                 <div class="card-header">Dashboard</div>
 
                 <div class="card-body">
+                @can(1) <p>this is ACL testing </p> @endcan
                      @if(Session::has('success'))
                                 <div class="alert alert-success">
                                     {{ Session::get('success') }}
