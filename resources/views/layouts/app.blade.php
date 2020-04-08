@@ -53,7 +53,7 @@
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 								<a class="dropdown-item" href="{{ route('loginwith') }}">{{__('loginwith') }}</a>
 								<a class="dropdown-item" href="{{ route('register') }}">{{__('Register') }}</a>
-								@can(1) <a class="dropdown-item" href="{{ route('manageroles') }}">{{__('Manage Roles') }}</a> @endcan
+								<a class="dropdown-item" href="{{ route('manageroles') }}">{{__('Manage Roles') }}</a>
 								<a class="dropdown-item" href="/manageusers">{{__('Manage Users') }}</a>
                                   
                                     <a class="dropdown-item" href="{{ route('logout') }}"
