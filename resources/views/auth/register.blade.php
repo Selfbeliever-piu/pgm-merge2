@@ -155,6 +155,8 @@ function showCheckboxes() {
     checkboxes.style.display = "none";
     expanded = false;
   }
+
+  
 }
 
 function register(){

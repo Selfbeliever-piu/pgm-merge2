@@ -8,6 +8,8 @@
                 <div class="card-header">  {{ __('User Details') }}</div>
 
                 <div class="card-body">
+
+
                     <form method="POST" action="{{ route('editUser')}}" id="editUserDetailsForm">
                         @csrf
 
@@ -27,10 +29,10 @@
 
 
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('UserName') }}</label>
                             
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{empty($res_user->name)? old('name') : $res_user->name }}" required autocomplete="name" autofocus>
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{empty($res_user->username)? old('name') : $res_user->username }}" required autocomplete="name" autofocus>
 
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
@@ -62,29 +64,31 @@
                             <label for="roles" class="col-md-4 col-form-label text-md-right">{{ __('Assign Roles') }}</label>
 
                             <div class="col-md-6">  
-                            <div class="selectBox" onclick="showCheckboxes()">
+                            <div class="selectBox" onclick="showCheckboxes()" class="form-control @if($errors->has('roles') == 1) is-invalid @endif">
                                 <select  type="text" class="form-control" required autofocus>
                                     <option value="">Select Roles</option>                                          
                                 </select>
                                 <div class="overSelect"> 
                                 </div>
+
                                 
                             </div>
                             <div id="checkboxes">
-                                <input id="roles" hidden type="text"class="form-control @error('roles') is-invalid @enderror" name="roles"  required autofocus />
+                                <input id="roles" hidden type="text" name="roles"  required autofocus />
                                 @if(count($allRoles)>0)
                                 @foreach($allRoles as $role)
-                                <label class="check_label" for="{{$role}}"  ><input type="checkbox"  id="{{$role}}" class="role_checks" @if(strpos( $selectedRoles, $role) || strpos($selectedRoles, $role) === 0  ) checked @endif /> {{$role}} </label>
+                                <label class="check_label" for="{{$role}}"  ><input type="checkbox"  id="{{$role}}" class="role_checks" value="{{$role}}" @if(strpos( $selectedRoles, $role) || strpos($selectedRoles, $role) === 0 || (is_array(old($role) ) && in_array($role, old($role) ))) checked @endif/> {{$role}} </label>
 
                                 @endforeach
                                 
                                 @endif
                             </div>
-                            @error('roles')
-                            <span class="invalid-feedback" role="alert">
-                                 <strong>{{ $message }}</strong>
+                            @if($errors->has('roles') == 1)
+                            <span class="text-danger" role="alert">
+                                 <strong>{{ $errors->first('roles') }}</strong>
                             </span>
                             @enderror
+                            
                         </div>
                     </div>
                     
@@ -92,7 +96,7 @@
                             <div class="col-md-6 offset-md-4">
                             
                                 <button type="button" onclick="save();" class="btn btn-primary">
-                                   {{empty($res_user)? __('Register') : __('Save') }}
+                                   {{ __('Save') }}
                                 </button>
                                 <a href="/manageusers" class="btn btn-outline-danger float-center " >Cancel</a>
                             </div>

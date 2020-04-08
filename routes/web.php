@@ -31,6 +31,7 @@ Route::post('/loginwith', 'Adminconfig\AdminconfigController@saveuserloginwith')
 
 Route::post('/edituser','manageUsers@editUser')->name('editUser');
 Route::post('/edit','manageUsers@edit')->name('edit');
+Route::get('/edit','manageUsers@edit');
 Route::get('/manageroles', 'ManageRoles@index')->name('manageroles')->middleware('auth');
 Route::post('/manageroles/save', 'ManageRoles@saveRoles')->name('saveRolePermissions');
 Route::post('/manageroles/delete', 'ManageRoles@deleteRoles')->name('deleteRole');

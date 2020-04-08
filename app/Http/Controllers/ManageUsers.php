@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 use App\User;
 use DB;
 
@@ -61,26 +63,53 @@ class ManageUsers extends Controller
 
 public function edit(Request $request)   
 {
+
+
+    // log::alert($request->input('userName'));
+
+    $username = $request->input('userName');
     
-    $user = DB::select("SELECT * FROM users WHERE username ='".$_POST['userName']."'");
+    if(isset($username) && $username!== ' '){
+    
+    $user = DB::select("SELECT * FROM users WHERE username ='".$username."'");
+    $user = $user[0];
+
+    $user_roles = $request->input('userRoles');
+
+    } 
+    else{
+        $user='';
+        $user_roles = $request->old('roles');
+        }
     $allRoles = DB::table('roles')->pluck('role')->toArray();
 
 
-    return view('usermanagement.viewUserDetails')->with(['res_user'=>$user[0], 'allRoles'=> $allRoles, 'selectedRoles'=>$_POST['userRoles']]);
+    return view('usermanagement.viewUserDetails')->with(['res_user'=>$user, 'allRoles'=> $allRoles, 'selectedRoles'=>$user_roles]);
+    
     
     
 }
 
+
+
 public function editUser(Request $request ){
 
-   
-    $request->validate([
 
-        'name' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'email', 'max:255'],
-        
 
-    ]);
+        $request->validate([
+
+            'name' => ['required','unique:users,name,'.$request->input('id').',id', 'string', 'max:255'],
+            'email' => ['required', 'unique:users,email,'.$request->input('id').',id','string', 'email', 'max:255'],
+            'roles' => ['required'],
+            
+
+        ],[
+            'name.required' => 'username is required',
+            'roles.required' => 'Please select atleast one role.'
+        ]
+    );
+
+    
 
         $roles = explode(',',$_POST['roles']);
    
