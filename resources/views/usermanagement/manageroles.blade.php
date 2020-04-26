@@ -229,7 +229,7 @@ $('#tblPosts').on("click",".editlink",function() {
 
 	if($($label).length){
 	var label = $label.attr('id');
-	//added textbox after label for to edit
+	//added textbox after label to edit
 	$label.after("<input type='text' class='editable' style='display:none' />"); 
 	var textbox = $label.next();
 	textbox[0].id ="text_"+label;
@@ -244,23 +244,24 @@ $('#tblPosts').on("click",".editlink",function() {
 	
 	}
 		return false;
-
 	 
 });
+
+// on click of save button
 
 $('.allSave').click(function(){
 	save();
 	return false;
 });
 
-
+// on click event of inline save link
 
 $('#tblPosts').on("click", ".savelink",function(){
+
 	select_checkbox =  $(this).parent().siblings('.rolename').find('.editable');
-	console.log("select box "+select_checkbox.val());
+	//check for the rolename empty or not
 	if($(select_checkbox).val()){
 	$selected_role = $(this).parent().siblings('.selected_row').children();
-	console.log($selected_role.attr('id'));
 	var id = $selected_role.attr('id');	
 	save(id); 
 	}
@@ -273,11 +274,11 @@ $('#tblPosts').on("click", ".savelink",function(){
 	
 });
 
-
+// on click event of inline delete link
 
 $('#tblPosts').on("click",".deletelink",function(){
-	console.log('delete');
 	$select_checkbox =  $(this).parent().siblings('.rolename').find('span');
+	
 	if($select_checkbox.html()){
 		$selected_checkbox = $(this).parent().siblings('.selected_row').children();
 		console.log($selected_checkbox.attr('id'));
