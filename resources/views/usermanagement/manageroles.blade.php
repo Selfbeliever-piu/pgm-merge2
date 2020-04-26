@@ -116,14 +116,9 @@ var tr = '<tr id="new_row">'+
 $('tbody').append(tr);
 }				
 
+
+// function to save or update the roles in DB.
 function save(edit){
-	
-
-	var  rows= $('#tblPosts tbody .created_roles').length;
-
-	var new_roles= $('#tblPosts tbody .editable').length;
-
-	console.log("new roles "+ new_roles);
 
 	var previous_values={};
 
@@ -132,44 +127,35 @@ function save(edit){
 	var newUsersData = new Array(); 
 
 	if(edit!=null){
+		// execute on click event of inline save link
 		previous_values[edit] = document.getElementById(edit).value ;
-		
 		selected_id.push(edit);
 		selected.push(document.getElementById('text_role_name_'+edit).value);
-
 	}
 	else{
+		//execute on click event of save button for multi-selected row
 		$("#tblPosts input.created_roles[type=checkbox]:checked").each(function () {
 			previous_values[this.id] = document.getElementById(this.id).value ;
-			
+			//check for empty role value input
 			if(typeof document.getElementById('text_role_name_'+this.id)!== 'undefined' && document.getElementById('text_role_name_'+this.id)!== null){
 				this.value = document.getElementById('text_role_name_'+this.id).value;
 				if(this.value){
 					selected_id.push(this.id);
 					selected.push(this.value);
 				}
-				
-			
 			}
-			
-
 	});
 	}
 	
-	
+	// check for permissions of every selected roles
 	
 	for (i=0; i<selected.length; i++) {
 		
 		let role_permissions = new Array();
 
-		console.log(role_permissions.length);
-
-		console.log(document.getElementById('permission_'+selected_id[i]+'_1').checked);
-
 		if(document.getElementById('permission_'+selected_id[i]+'_1').checked){
 			role_permissions.push("create_client");
 		}
-			
 		
 		if(document.getElementById('permission_'+selected_id[i]+'_2').checked)
 			role_permissions.push("create_project");
@@ -181,8 +167,6 @@ function save(edit){
 			role_permissions.push("create_contacts");
 
 		role_permissions = role_permissions.join();
-
-		console.log(role_permissions);
 		
 		if(role_permissions.length > 0){
 
@@ -203,7 +187,7 @@ function save(edit){
 
 	}
 
-	
+	//ajax call to save new role or update role
 
 	$.ajaxSetup({
             headers: {
@@ -234,30 +218,32 @@ function save(edit){
 
 $(document).ready(function() {
 
-
+//To keep superadmin role at top 
 $('tr[id="superadmin_row"]').insertAfter('table tr:first');
 
+//func exp for inline edit link
+
 $('#tblPosts').on("click",".editlink",function() {
-	console.log("edit");
+
 	$label = $(this).parent().siblings('.rolename').find('span');
-	console.log("length "+$($label).length);
+
 	if($($label).length){
-		var label = $label.attr('id');
+	var label = $label.attr('id');
+	//added textbox after label for to edit
 	$label.after("<input type='text' class='editable' style='display:none' />"); 
 	var textbox = $label.next();
 	textbox[0].id ="text_"+label;
 	textbox[0].name = "text_"+label;
 	textbox.val($label.html());
+	//hide label and show textbox
 	$label.hide();
 	$label.next().show();
+	//enable checkboxes to edit 
 	$per_label = $(this).parent().siblings('.role_permissions');
 	$per_label.attr('contenteditable','false'); 
 	
 	}
-	
 		return false;
-	
-    
 
 	 
 });
