@@ -2,7 +2,24 @@
 
 @section('content')
 <div class="container">
+<<<<<<< HEAD
 @include('flash_message')
+=======
+
+@if ($errors->any())
+
+<div class="alert alert-danger">
+
+    <button type="button" class="close" data-dismiss="alert">×</button>
+
+    Please enter valid credentials
+
+</div>
+
+@endif
+
+
+>>>>>>> 64a1436fdf0a5a410c25287fb2296dfac6a0b28c
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">

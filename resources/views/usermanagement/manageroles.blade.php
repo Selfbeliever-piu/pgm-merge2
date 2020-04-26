@@ -278,16 +278,14 @@ $('#tblPosts').on("click", ".savelink",function(){
 
 $('#tblPosts').on("click",".deletelink",function(){
 	$select_checkbox =  $(this).parent().siblings('.rolename').find('span');
-	
+
 	if($select_checkbox.html()){
 		$selected_checkbox = $(this).parent().siblings('.selected_row').children();
-		console.log($selected_checkbox.attr('id'));
 		var id = $selected_checkbox.attr('id');
 		deleteRole(id);
 	}
 	else{
 		selected_row =  $(this).parent().parent();
-		console.log("empty role");
 		$(selected_row).remove();
 		return false;
 
@@ -295,34 +293,30 @@ $('#tblPosts').on("click",".deletelink",function(){
 	
 });
 
-
+// To select all checkboxes
 $('#all_Check').change(function(){
-	
 	$(".created_roles").prop('checked', $(this).prop("checked"));
-	
 });
 
 });
 
 
-
+//function to delete roles from db
 
   function deleteRole(id){
-
 
 	var selected = new Array();
 	var selected_id = new Array();
 	var rolesData = new Array();
 
 	if(id){
-		console.log("id of role "+ id);
-		console.log("value of role "+ document.getElementById(id).value);
+		//if delete function called using inline delete link.
 		selected_id.push(id);
 		selected.push(document.getElementById(id).value);
 		
 	}
 	else{
-
+		// to delete multiple roles using delete button 	
 		$("#tblPosts input.created_roles[type=checkbox]:checked").each(function () {
 
 			if($(this).parent().parent().attr('id')!='new_row'){
@@ -330,26 +324,21 @@ $('#all_Check').change(function(){
 				selected.push(this.value);
 			}
 			else{
+				//if user try to remove newly added row
 				$(this).parent().parent().remove();
 				
 			}
 		
 	}); 
-
-
-
-	// 	$("#tblPosts input.created_roles[type=checkbox]:checked").each(function () {
-		
-	// 	selected_id.push(this.id);
-	// 	selected.push(this.value);
-
-	// }); 
+ 
 	}
 	
 
-	console.log("selected value array  " + selected);
+// ajax call to delete roles
 
 	if(selected.length>0){
+
+		// create object of selected roles to delete
 		for (i=0; i<selected.length; i++) {
 		
 		rolesData.push({
@@ -370,11 +359,7 @@ $('#all_Check').change(function(){
 				url: "{{ route('deleteRole') }}",
 				type: 'POST',
 				dataType: 'json',
-				data: JSON.stringify(rolesData),
-				
-				// success: function (data) {
-				//     console.log('Ajax was Successful!')
-				// }
+				data: JSON.stringify(rolesData)
 				
 			});
 	
