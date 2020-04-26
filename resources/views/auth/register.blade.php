@@ -2,6 +2,18 @@
 
 @section('content')
 <div class="container">
+@if ($message = Session::get('error'))
+
+<div class="alert alert-danger alert-block">
+
+    <button type="button" class="close" data-dismiss="alert">×</button>
+
+    <strong>{{ $message }}</strong>
+
+</div>
+
+@endif
+
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -29,12 +41,14 @@
                             <label for="username" class="col-md-4 col-form-label text-md-right">{{__('UserName')}}</label>
                             <div class="col-md-6">
                                 <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{old('username')}}" required autocomplete="username">
-                            </div>
-                            @error('username')
+                            
+                            @error("username")
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                             @enderror
+
+                            </div>
                         
                         </div>
 
@@ -57,28 +71,29 @@
                             <label for="roles" class="col-md-4 col-form-label text-md-right">{{ __('Assign Roles') }}</label>
 
                             <div class="col-md-6">
-                            <div class="selectBox" onclick="showCheckboxes()">
-                                <select  type="text" class="form-control" required autofocus>
-                                 <option value="">Select Roles</option>                                          
-                                </select>
-                                <div class="overSelect"> </div>
+                                <div class="selectBox" onclick="showCheckboxes()" >
+                                    <select  type="text" class="form-control @error('roles') is-invalid @enderror " required autofocus>
+                                        <option value="">Select Roles</option>                                          
+                                    </select>
+                                     @error('roles')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                                    <div class="overSelect "> </div>
                                 
                                 </div>
                                 <div id="checkboxes">
-                                <input id="roles" hidden type="text"class="form-control @error('roles') is-invalid @enderror" name="roles"  required autofocus />
-                                @if(count($roles)>0)
-                                @foreach($roles as $role)
+                                    <input id="roles" hidden type="text" name="roles"  required autofocus />
+                                    @if(count($roles)>0)
+                                    @foreach($roles as $role)
                                     <label class="check_label" for="{{$role}}"  ><input type="checkbox"  id="{{$role}}" class="role_checks"/> {{$role}} </label>
 
                                 @endforeach
                                 
                                 @endif
                                 </div>
-                                @error('roles')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                               
                             </div>
 
                         </div>

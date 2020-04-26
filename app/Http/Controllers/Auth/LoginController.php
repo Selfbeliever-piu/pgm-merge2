@@ -92,7 +92,7 @@ public function username()
         $pwd_reseted = $user->reset_pwd_on_flogin;
 
          return ($pwd_reseted === 0
-        )? redirect('\update-password'): redirect()->intended($this->redirectPath()) ;
+        )? redirect('update-password'): redirect()->intended($this->redirectPath()) ;
 
     }
     

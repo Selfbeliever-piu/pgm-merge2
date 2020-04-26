@@ -14,6 +14,13 @@ class rolesSeeder extends Seeder
         //
 
         DB::table('roles')->insert([
+
+            'role' => 'superadmin',
+
+            'description' => 'Having all access '
+        ]);
+
+        DB::table('roles')->insert([
         
             'role' => 'admin',
             

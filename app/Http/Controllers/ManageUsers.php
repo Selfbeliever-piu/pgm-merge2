@@ -21,8 +21,8 @@ class ManageUsers extends Controller
     //
     
     public function index(){
-    $users_list =   DB::table('users')->pluck('username')->toArray();
-
+    $users_list =   DB::select("SELECT * FROM users");
+    $users_list = json_decode(json_encode($users_list),true);
 
     $users_roles = DB::table('user_role_mappings')
             ->join('users', 'user_role_mappings.user_id', '=', 'users.id')
@@ -36,8 +36,7 @@ class ManageUsers extends Controller
 
     foreach ($users_list as $user){
 
-        //log::alert($user);
-        $users[$user] = ' ';
+        $users[$user['username']] = ' ';
         
     }
 
@@ -57,7 +56,8 @@ class ManageUsers extends Controller
           }                
       }
 
-    return view('usermanagement.manageusers')->with('users',$users);
+
+     return view('usermanagement.manageusers')->with(['users_roles'=> $users, "users" => $users_list]);
 
 }
 
@@ -131,7 +131,7 @@ public function editUser(Request $request ){
            
          }
 
-        return redirect('/manageusers')->with('success', 'SUccessfully updated User Details.');
+        return redirect('/manageusers')->with('success', 'Successfully updated User Details.');
 
 
 }

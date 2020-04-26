@@ -13,7 +13,8 @@ class ManageRoles extends Controller
     public function index(){
 
       /* List of roles and  permissions */
-       $total_roles =   DB::table('roles')->pluck('role')->toArray();
+       $total_roles =   DB::table('roles')->orderBy('id')->pluck('role')->toArray();
+
        $permissions = DB::select(' SELECT * FROM permissions');
   
        
@@ -57,6 +58,8 @@ class ManageRoles extends Controller
     public function saveRoles(Request $request) {
 
       $rolesData = json_decode($request->getContent(), true);
+
+ 
    
       foreach($rolesData as $role){
 
@@ -69,10 +72,12 @@ class ManageRoles extends Controller
 
     
           $roel_id = DB::table('roles')->select('id')->where('role',$role['previous_role'])->get();
+         
      
         }
         
-        if(!empty($roel_id)){
+        if(!empty($roel_id) && count($roel_id)>0){
+        
           $role_id = $roel_id[0]->id;
            $updated_role = DB::table('roles')->where('id',$role_id)->update($roleDetails);
            log::alert("update ".$updated_role);
@@ -80,6 +85,7 @@ class ManageRoles extends Controller
 
         }
         else{
+         
           $role_id = DB::table('roles')->insertGetId(['role' => $role['role'],'description' => "new roles"]);
         }
 

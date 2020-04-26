@@ -87,6 +87,9 @@ class RegisterController extends Controller
             'username' =>['required', 'string', 'max:25', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'roles' => ['required', 'string',  'max:255'],
+        ],[
+            'username' => 'The username is already taken',
+            'roles.required'=> 'Please select atleast one role.'
         ]);
     }
 

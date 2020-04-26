@@ -27,7 +27,7 @@ class CusResetpasswordController extends Controller
         $this->validate($request, [
 
             'oldpassword' => 'required',
-            'password' => 'required|confirmed'
+            'password' => 'required|confirmed|different:oldpassword'
         ]);
 
 

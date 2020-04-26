@@ -3,7 +3,15 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
+
         <div class="col-md-11">
+			<div id="error" class="alert alert-danger" style="display:none">
+
+    			<button type="button" class="close" data-dismiss="alert">×</button>
+
+    			<span id="error_message"></span>
+
+			</div>
             <div class="card">
                 <div class="card-header">Dashboard 
 				<a href=""  onclick="" class=" allSave btn btn-outline-primary float-right col-md-3" >Save Roles</a>
@@ -30,18 +38,27 @@
 						</tr>
 
 						@foreach($roles as $role=> $role_permissions)
-						<tr id="roles_per">
+						<tr id="{{$role}}_row" @if(strcmp($role ,"superadmin") === 0 )style="background: #c8bfbf" @endif>
 							@php($permission_count =1)
-							<td class="selected_row"><input type="checkbox" class="created_roles"  id="{{$count}}" name="{{$count}}" value ="{{$role}} " ></td>
-							<td class= "rolename" style=" text-align: center; vertical-align: middle;" ><span id="role_name_{{$count}}" name="role_name_{{$count}} "  >{{$role}}</span></td> 
-						
+							
+							<td class="selected_row">@if(strcmp($role ,"superadmin") !== 0)<input type="checkbox" class="created_roles"  id="{{$count}}" name="{{$count}}" value ="{{$role}} " @if(strcmp($role ,"superadmin") === 0) disabled @endif  >@endif</td>
+							
+
+							<td class= "rolename" style=" text-align: center; vertical-align: middle;" ><span id="role_name_{{$count}}" name="role_name_{{$count}} " @if(strcmp($role ,"superadmin") === 0) disabled @endif >{{$role}}</span></td> 
+							
 							@foreach($permissions as $permission)
-							<td class="role_permissions" contenteditable ='true' style=" text-align: center; "><input type="checkbox"  value="" id="permission_{{$count}}_{{$permission_count}}" name="permission_{{$count}}_{{$permission_count}}" class="form-check-input"  @if(strpos( $role_permissions, $permission->permission) || strpos($role_permissions, $permission->permission) === 0  ) checked @endif></td>
+							<td class="role_permissions" contenteditable ='true' style=" text-align: center; "><input type="checkbox"  value="" id="permission_{{$count}}_{{$permission_count}}" name="permission_{{$count}}_{{$permission_count}}" class="form-check-input"  @if(strpos( $role_permissions, $permission->permission) || strpos($role_permissions, $permission->permission) === 0  ) checked @endif @if(strcmp($role ,"superadmin") === 0) disabled @endif></td>
 							@php($permission_count++)
 							@endforeach
-							<td id="edittd"><a href="" class="editlink" >edit</a></td>
-							<td id="saveChanges"><a href=""  class="savelink">save</a></td>
-							<td id="deleteRole"><a href="" class="deletelink">delete</a></td>
+							@if(strcmp($role ,"superadmin") !== 0)
+							<td id="edittd"   ><a href="" class="editlink"  >edit</a></td>
+							<td id="saveChanges"><a href=""  class="savelink" >save</a></td>
+							<td id="deleteRole" ><a href="" class="deletelink" >delete</a></td>
+							@else
+							<td></td> 
+							<td></td> 
+							<td></td> 
+							@endif
 							@php($count++)
 						</tr>
 
@@ -69,9 +86,8 @@
 function addRow(){
 	var rows= $('#tblPosts tbody .created_roles').length;
 
+	rows+=2;
 	console.log("lenght of row "+rows);
-
-	rows++;
 
 	var count=1;
 
@@ -87,7 +103,7 @@ var tr = '<tr id="new_row">'+
 	'@foreach($permissions as $permission)'+
 	
 	'<td class="role_permissions" style=" text-align: center; vertical-align: middle;">'+
-		'<input type="checkbox" id="permission_'+rows+'_{{$permission_count}}" name="permission_'+rows+'_{{$permission_count}}" class="form-check-input" value="" >'+
+		'<input type="checkbox" id="permission_'+rows+'_{{$permission_count}}" name="permission_'+rows+'_{{$permission_count}}"  value="" >'+
 	'</td>'
 	+'@php($permission_count++)'
 	+'@endforeach'+
@@ -113,7 +129,7 @@ function save(edit){
 
 	var selected = new Array();
 	var selected_id = new Array();
-	var newUsersData = new Array();
+	var newUsersData = new Array(); 
 
 	if(edit!=null){
 		previous_values[edit] = document.getElementById(edit).value ;
@@ -128,8 +144,12 @@ function save(edit){
 			
 			if(typeof document.getElementById('text_role_name_'+this.id)!== 'undefined' && document.getElementById('text_role_name_'+this.id)!== null){
 				this.value = document.getElementById('text_role_name_'+this.id).value;
-			selected_id.push(this.id);
-			selected.push(this.value);
+				if(this.value){
+					selected_id.push(this.id);
+					selected.push(this.value);
+				}
+				
+			
 			}
 			
 
@@ -140,10 +160,16 @@ function save(edit){
 	
 	for (i=0; i<selected.length; i++) {
 		
-		var role_permissions = new Array();
+		let role_permissions = new Array();
 
-		if(document.getElementById('permission_'+selected_id[i]+'_1').checked)
+		console.log(role_permissions.length);
+
+		console.log(document.getElementById('permission_'+selected_id[i]+'_1').checked);
+
+		if(document.getElementById('permission_'+selected_id[i]+'_1').checked){
 			role_permissions.push("create_client");
+		}
+			
 		
 		if(document.getElementById('permission_'+selected_id[i]+'_2').checked)
 			role_permissions.push("create_project");
@@ -155,8 +181,12 @@ function save(edit){
 			role_permissions.push("create_contacts");
 
 		role_permissions = role_permissions.join();
+
+		console.log(role_permissions);
 		
-		newUsersData.push({
+		if(role_permissions.length > 0){
+
+			newUsersData.push({
 			id: selected_id[i],
 			previous_role: previous_values[selected_id[i]],
 			role: selected[i],
@@ -164,7 +194,12 @@ function save(edit){
 			
 		});
 
-	
+		}else{
+			var span_error = document.getElementById("error_message");
+			span_error.textContent = "Please select atleast one Permission."
+			$('#error').show();	
+			return false;
+		}
 
 	}
 
@@ -199,6 +234,9 @@ function save(edit){
 
 $(document).ready(function() {
 
+
+$('tr[id="superadmin_row"]').insertAfter('table tr:first');
+
 $('#tblPosts').on("click",".editlink",function() {
 	console.log("edit");
 	$label = $(this).parent().siblings('.rolename').find('span');
@@ -226,6 +264,7 @@ $('#tblPosts').on("click",".editlink",function() {
 
 $('.allSave').click(function(){
 	save();
+	return false;
 });
 
 
@@ -238,9 +277,13 @@ $('#tblPosts').on("click", ".savelink",function(){
 	console.log($selected_role.attr('id'));
 	var id = $selected_role.attr('id');	
 	save(id); 
-	return false;
 	}
-	
+	else{
+		var span_error = document.getElementById("error_message");
+			span_error.textContent = "Role Name can't be empty."
+			$('#error').show();		
+	}
+	return false;
 	
 });
 

@@ -54,7 +54,7 @@
 
 
 
-@if ($errors->any())
+<!-- @if ($errors->any())
 
 <div class="alert alert-danger">
 
@@ -64,4 +64,4 @@
 
 </div>
 
-@endif
+@endif -->
