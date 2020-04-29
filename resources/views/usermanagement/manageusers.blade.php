@@ -4,7 +4,7 @@
 <div class="container">
 @include('flash_message')
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-10">
             <div class="card">
                 <div class="card-header">Users List</div>
 
@@ -80,12 +80,20 @@ function edit(username, roles){
 </script>
 
 <style>
-th{
-	text-align:center;
+table{
+	table-layout: fixed;
+  	width: 100%;
+  	white-space: nowrap;
 }
-td{
+table th, td{
 	text-align:center;
+	white-space: normal;
+  /* overflow: hidden;
+  text-overflow: ellipsis; */
 }
+/* td{
+	text-align:center;
+} */
 </style>
 
 @endsection
